@@ -6,8 +6,6 @@ using namespace std;
 
 class Treap {
     //static minstd_rand generator;
-    //int key, priority;
-    //Treap *left = nullptr, *right = nullptr;
     struct Node {
         int key, priority;
         Node *left = nullptr, *right = nullptr;
@@ -16,14 +14,7 @@ class Treap {
         }
     };
 
-    Node *root = nullptr;
-
-    // Treap(int key, Treap *left = nullptr, Treap *right = nullptr) {
-    //     this->key = key;
-    //     this->priority = generator();
-    //     this->left = left;
-    //     this->right = right;
-    // }
+    Node *root_ = nullptr;
 
     static Node *merge(Node *t1, Node *t2) {
         if (!t1)
@@ -88,52 +79,33 @@ class Treap {
     }
 
   public:
-    // Treap() {
-    //   root = new Node();
-    // }
     void insert(int key, int priority) {
         Node *less, *greater;
-        split(root, key, less, greater);
+        split(root_, key, less, greater);
         less = merge(less, new Node(key, priority));
-        root = merge(less, greater);
+        root_ = merge(less, greater);
     }
 
     void remove(int key) {
         Node *less, *equal, *greater;
-        split(root, key, less, greater);
+        split(root_, key, less, greater);
         split(greater, key + 1, equal, greater);
-        root = merge(less, greater);
+        root_ = merge(less, greater);
     }
 
     bool contains(int key) {
-        return containsImp(key, root);
+        return containsImp(key, root_);
     }
 
     vector<int> *getKeys() {
         vector<int> *keys = new vector<int>;
-        getKeysImp(root, keys);
+        getKeysImp(root_, keys);
         return keys;
     }
 
     ~Treap() {
-        destruct(root);
+        destruct(root_);
     }
 };
 
 //minstd_rand Treap::generator;
-
-// int main() {
-//     vector<int> k = {1, 2, 3, 4, 5, 6, 7};
-//     vector<int> p = {25, 14, 31, 26, 45, 72, 54};
-//     Treap *t = new Treap();
-//     for (int i = 0; i < 7; i++) {
-//         t->insert(k[i], p[i]);
-//     }
-//     vector<int> *a = t->getKeys();
-//     for (int i = 0; i < a->size(); i++) {
-//         cout << a->at(i) << " ";
-//     }
-//     cout << "\n";
-//     delete t;
-//     delete a;
-// }
