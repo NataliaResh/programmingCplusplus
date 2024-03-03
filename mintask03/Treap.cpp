@@ -9,8 +9,13 @@ class Treap {
     struct Node {
         int key, priority;
         Node *left = nullptr, *right = nullptr;
+        Node() = default;
 
         Node(int key, int priority) : key(key), priority(priority) {
+        }
+
+        Node(const Node &other)
+            : key(other.key), priority(other.priority), left(other.left), right(other.right) {
         }
     };
 
@@ -69,7 +74,8 @@ class Treap {
     }
 
     void destruct(Node *node) {
-        if (!node) return;
+        if (!node)
+            return;
         if (node->left) {
             destruct(node->left);
         }
@@ -79,7 +85,34 @@ class Treap {
         delete node;
     }
 
+    Node *copyNode(Node *node) {
+        if (!node)
+            return nullptr;
+        Node *newNode = new Node(node->key, node->priority);
+        if (node->left) {
+            newNode->left = copyNode(node->left);
+        }
+        if (node->right) {
+            newNode->right = copyNode(node->right);
+        }
+        return newNode;
+    }
+
   public:
+    Treap() {
+    }
+
+    Treap(const Treap &other) : root_(other.root_) {
+    }
+
+    Treap &operator=(const Treap &other) {
+        if (this != &other) {
+            destruct(root_);
+            root_ = copyNode(other.root_);
+        }
+        return *this;
+    }
+
     void insert(int key, int priority) {
         Node *less, *greater;
         split(root_, key, less, greater);
