@@ -8,7 +8,6 @@ using namespace std;
 class Node {
     friend class Treap;
 
-    
     int key, priority;
     Node *left = nullptr, *right = nullptr;
     Node() = default;
@@ -32,8 +31,8 @@ class Treap {
     //static minstd_rand generator;
 
     Node *root_ = nullptr;
-    
-   static Node *copyNode(const Node *node) {
+
+    static Node *copyNode(const Node *node) {
         if (!node)
             return nullptr;
         Node *newNode = new Node(node->key, node->priority);
@@ -134,19 +133,19 @@ class Treap {
     }
 
     static void insertNodes(Treap &t, Node *right) {
-      t.insert(right->key, right->priority);
-      if (right->left) {
-        insertNodes(t, right->left);
-      }
-      if (right->right) {
-        insertNodes(t, right->right);
-      }
+        t.insert(right->key, right->priority);
+        if (right->left) {
+            insertNodes(t, right->left);
+        }
+        if (right->right) {
+            insertNodes(t, right->right);
+        }
     }
 
     Treap operator+(const Treap &right) {
-      Treap result = *this;
-      insertNodes(result, right.root_);
-      return result;
+        Treap result = *this;
+        insertNodes(result, right.root_);
+        return result;
     }
 
     void insert(int key, int priority) {
