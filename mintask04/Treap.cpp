@@ -5,37 +5,30 @@
 
 using namespace std;
 
-class Node {
-    friend class Treap;
+class Treap {
+    static minstd_rand generator;
+    
+    struct Node {
+        int key, priority;
+        Node *left = nullptr, *right = nullptr;
+        Node() = default;
 
-    int key, priority;
-    Node *left = nullptr, *right = nullptr;
-    Node() = default;
+        Node(int key) : key(key), priority(generator()) {}
+        
+        Node(int key, int priority) : key(key), priority(priority) {}
 
-    Node(int key, int priority) : key(key), priority(priority) {
-        cout << "Node default constructor\n";
-        cout.flush();
-    }
-
-    ~Node() {
-        if (left) {
+        ~Node() {
             delete left;
-        }
-        if (right) {
             delete right;
         }
-    }
-};
-
-class Treap {
-    //static minstd_rand generator;
+    };
 
     Node *root_ = nullptr;
 
     static Node *copyNode(const Node *node) {
         if (!node)
             return nullptr;
-        Node *newNode = new Node(node->key, node->priority);
+        Node *newNode = new Node(node->key);
         if (node->left) {
             newNode->left = copyNode(node->left);
         }
@@ -97,41 +90,6 @@ class Treap {
         keys->push_back(node->key);
     }
 
-  public:
-    Treap() {
-        cout << "Defult constructor\n";
-    }
-
-    Treap(const Treap &other) {
-        cout << "Copy constructor\n";
-        root_ = copyNode(other.root_);
-    }
-
-    Treap &operator=(const Treap &other) {
-        cout << "Copy assigment constructor\n";
-        if (this != &other) {
-            delete root_;
-            root_ = copyNode(other.root_);
-        }
-        return *this;
-    }
-
-    Treap(Treap &&other) {
-        cout << "Move constructor\n";
-        root_ = copyNode(other.root_);
-        other.root_ = nullptr;
-    }
-
-    Treap &operator=(Treap &&other) {
-        cout << "Move assigment constructor\n";
-        if (this != &other) {
-            delete root_;
-            root_ = copyNode(other.root_);
-            other.root_ = nullptr;
-        }
-        return *this;
-    }
-
     static void insertNodes(Treap &t, Node *right) {
         t.insert(right->key, right->priority);
         if (right->left) {
@@ -142,16 +100,51 @@ class Treap {
         }
     }
 
+    void insert(int key, int priority) {
+        Node *less, *greater;
+        split(root_, key, less, greater);
+        less = merge(less, new Node(key, priority));
+        root_ = merge(less, greater);
+    }
+  public:
+    Treap() {}
+
+    Treap(const Treap &other) {
+        root_ = copyNode(other.root_);
+    }
+
+    Treap &operator=(const Treap &other) {
+        if (this != &other) {
+            delete root_;
+            root_ = copyNode(other.root_);
+        }
+        return *this;
+    }
+
+    Treap(Treap &&other) {
+        root_ = copyNode(other.root_);
+        other.root_ = nullptr;
+    }
+
+    Treap &operator=(Treap &&other) {
+        if (this != &other) {
+            delete root_;
+            root_ = copyNode(other.root_);
+            other.root_ = nullptr;
+        }
+        return *this;
+    }
+    
     Treap operator+(const Treap &right) {
         Treap result = *this;
         insertNodes(result, right.root_);
         return result;
     }
 
-    void insert(int key, int priority) {
+    void insert(int key) {
         Node *less, *greater;
         split(root_, key, less, greater);
-        less = merge(less, new Node(key, priority));
+        less = merge(less, new Node(key));
         root_ = merge(less, greater);
     }
 
@@ -168,14 +161,13 @@ class Treap {
 
     vector<int> *getKeys() {
         vector<int> *keys = new vector<int>;
-        getKeysImp(root_, keys);
+        if (root_) getKeysImp(root_, keys);
         return keys;
     }
 
     ~Treap() {
-        cout << "Destructor\n";
         delete root_;
     }
 };
 
-//minstd_rand Treap::generator;
+minstd_rand Treap::generator;
