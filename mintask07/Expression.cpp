@@ -14,6 +14,7 @@ class Expression {
     virtual string getString() {
         return "";
     }
+    virtual ~Expression() {}
 };
 
 class Binary : public Expression {
@@ -31,6 +32,10 @@ class Binary : public Expression {
     Expression *left() {
         return left_;
     }
+    virtual ~Binary() {
+      delete right_;
+      delete left_;
+    }
 };
 
 class Unary : public Expression {
@@ -42,6 +47,9 @@ class Unary : public Expression {
 
     Expression *expr() {
         return expr_;
+    }
+    virtual ~Unary() {
+      delete expr_;
     }
 };
 
@@ -148,12 +156,3 @@ class Var : public Expression {
         return var_;
     }
 };
-
-int main() {
-    Expression *e = new Add(new Var("x"), new Mult(new Val(10), new Var("y")));
-    Expression *res1 = e->diff("x");
-    cout << res1->getString() << "\n";
-    Expression *res2 = e->diff("y");
-    cout << res2->getString() << "\n";
-    return 0;
-}
