@@ -5,12 +5,20 @@
 using namespace std;
 
 class Treap {
-    //static minstd_rand generator;
+    static minstd_rand generator;
     struct Node {
         int key, priority;
         Node *left = nullptr, *right = nullptr;
+        
+        Node() = default;
+        
+        Node(int key) : key(key), priority(generator()) {}
+        
+        Node(int key, int priority) : key(key), priority(priority) {}
 
-        Node(int key, int priority) : key(key), priority(priority) {
+        ~Node() {
+            delete left;
+            delete right;
         }
     };
 
@@ -58,32 +66,23 @@ class Treap {
         }
     }
 
-    static void getKeysImp(Node *node, vector<int> *keys) {
+    static void getKeysImp(Node *node, vector<int> &keys) {
         if (node->left) {
             getKeysImp(node->left, keys);
         }
         if (node->right) {
             getKeysImp(node->right, keys);
         }
-        keys->push_back(node->key);
+        keys.push_back(node->key);
     }
 
-    void destruct(Node *node) {
-        if (!node) return;
-        if (node->left) {
-            destruct(node->left);
-        }
-        if (node->right) {
-            destruct(node->right);
-        }
-        delete node;
-    }
-
-  public:
-    void insert(int key, int priority) {
+ public:
+    Treap() = default;
+    
+    void insert(int key) {
         Node *less, *greater;
         split(root_, key, less, greater);
-        less = merge(less, new Node(key, priority));
+        less = merge(less, new Node(key));
         root_ = merge(less, greater);
     }
 
@@ -98,15 +97,15 @@ class Treap {
         return containsImp(key, root_);
     }
 
-    vector<int> *getKeys() {
-        vector<int> *keys = new vector<int>;
+    vector<int> getKeys() {
+        vector<int> keys;
         getKeysImp(root_, keys);
         return keys;
     }
 
     ~Treap() {
-        destruct(root_);
+        delete root_;
     }
 };
 
-//minstd_rand Treap::generator;
+minstd_rand Treap::generator;
