@@ -1,4 +1,5 @@
-#include "../Line.cpp"
+#include "../Line.cpp" // PR: including source files looks very strange
+                       // maybe we can say that this file is header?
 #include <exception>
 #include <gtest/gtest.h>
 
@@ -37,6 +38,6 @@ TEST(Test3, Test3) {
 }
 
 int main(int argc, char **argv) {
-    ::testing::InitGoogleTest(&argc, argv);
+    ::testing::InitGoogleTest(&argc, argv); // PR: again redundant '::'
     return RUN_ALL_TESTS();
 }

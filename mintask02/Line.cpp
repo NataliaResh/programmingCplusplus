@@ -3,10 +3,28 @@
 #include <iostream>
 #include <optional>
 
+/*
+PR: Summary
+
+    So it is the great work once again, but I have some commentaries
+    about consistency of 'const' modifier in methods signatures.
+    Lets add where they to all places where they can be
+    (actually it is one place and I left comment there)
+
+    Also there is concern about error handling in constructor
+    I suggest you to design new api using `std::optional`
+*/
+
 using namespace std;
 
 const static double e = 1e+5;
 
+// PR:
+// maybe Point should have some private fields
+// cause I can change the precision from the outside
+// but your struct thinks that all numbers has only five digits after comma, 
+// and this is invariant of your struct 
+// this is the reason why your operator== is correct 
 struct Point {
     double x;
     double y;
@@ -50,6 +68,8 @@ class Line {
     }
 
   public:
+    // PR: why should we return const reference to double field?
+    // to avoid copying?
     const double &a() const {
         return a_;
     }
@@ -62,7 +82,16 @@ class Line {
         return c_;
     }
 
+    // PR: maybe n and m can be constant references?
     Line(Point &m, Point &n) {
+        // PR: assertions it is kinda old way of error handling
+        // we use them in C because we have no alternatives
+        // but now we in C++)
+        // Maybe we can redisign this part of code?
+        // We still need to check that there is two different points
+        // but should we do this check in the constructor? (hint: this is something about OOP)
+        // You already used `std::optional` for handling errors
+        // maybe we can use it somehow and for this situation?
         assert(m != n);
         if (n.y == m.y) {
             a_ = (n.y - m.y) / (m.x - n.x);
@@ -77,6 +106,7 @@ class Line {
     }
 
     Line(double a, double b, double c) {
+        // PR: the same concern about asserts in constructors as above
         assert(a != 0 || b != 0);
         a_ = a;
         b_ = b;
@@ -99,6 +129,7 @@ class Line {
         return a_ * line.b_ == b_ * line.a_;
     }
 
+    // Note: nice usage of optional! I like it)
     optional<Point> intersection(const Line &line) {
         if (isParallel(line)) {
             return nullopt;
@@ -113,6 +144,9 @@ class Line {
         return Point(x, y);
     }
 
+    // PR: it is a bit strange to return pointer to Line here
+    // I guess you try to avoid copying, but it is okay here to return Line by value
+    // I mean you return Point by value in intersection method and it is okay) 
     Line *perpendicular(const Point &p) {
         double a = -b_;
         double b = a_;
