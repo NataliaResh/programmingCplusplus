@@ -1,4 +1,6 @@
-#include "../Treap.cpp"
+#include "../Treap.cpp" // PR: it is not really nice to include
+                        // source files somwhere
+                        // maybe we can split our class to source and header part?
 #include <exception>
 #include <gtest/gtest.h>
 #include <string>
@@ -6,7 +8,12 @@
 using namespace std;
 
 void test(vector<int> keys) {
-    Treap t = Treap();
+    Treap t = Treap(); // PR: this is value init for class
+                       // in this case it works fine and default destructor called
+                       // but we don't like this method of initialization for classes
+                       // you need to consider too many nuances 
+                       // to make it work correctly
+                       // I recommend to avoid value init for non tmp classes
     for (int i = 0; i < keys.size(); i++) {
         t.insert(keys[i]);
     }
@@ -38,6 +45,7 @@ TEST(Test3, Test3) {
 }
 
 int main(int argc, char **argv) {
-    ::testing::InitGoogleTest(&argc, argv);
+    ::testing::InitGoogleTest(&argc, argv); // PR '::somename' it is just synonimous
+                                            // for global namespace and it is redundant
     return RUN_ALL_TESTS();
 }
