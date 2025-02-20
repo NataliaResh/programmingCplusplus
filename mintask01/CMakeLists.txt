@@ -10,6 +10,9 @@ FetchContent_Declare(
   URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
 )
 
+#add_library(new_target Treap.h Treap.cpp)
+file (GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS Treap.h)
+
 set (gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
@@ -18,6 +21,7 @@ enable_testing()
 add_executable(
   test_suite
   tests/test_suite.cpp
+  Treap.cpp
 )
 
 target_link_libraries(
