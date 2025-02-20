@@ -1,0 +1,2 @@
+/usr/bin/ar qc libnew_target.a CMakeFiles/new_target.dir/Treap.cpp.o
+/usr/bin/ranlib libnew_target.a

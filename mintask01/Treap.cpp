@@ -1,11 +1,6 @@
-#include <iostream>
-#include <random>
-#include <vector>
+#include "Treap.h"
 
-using namespace std;
-
-class Treap {
-    /*
+/*
     PR:
         The main commentary about your solution is here.
         Your data structure is probabilistic, and it's guaranties by time complixety
@@ -48,124 +43,100 @@ class Treap {
         But C++ has nice api for make this work easier!
 
     */
-    static minstd_rand generator; // PR: do we need have global random generator for all treaps?
-                                  // or it will be better to make this field nonstatic?
+//static minstd_rand generator; // PR: do we need have global random generator for all treaps?
+                              // or it will be better to make this field nonstatic?
 
-    // PR: this is just sample function
-    // remove this function when you get familiar with randomness in C++
-    static void sample() {
-        // this is slow generator, that uses your OS entropy to generate pure random number
-        std::random_device rd; 
-        std::mt19937 generator(rd()); // we use this slow generator to generate random seed
-                                      // for our nice and fast random generator
+// PR: this is just sample function
+// remove this function when you get familiar with randomness in C++
 
-        std::uniform_int_distribution<int> dis; // this class guaranteed that we can get
-                                                // numbers from int diapason without losing
-                                                // uniform distribution
+Treap::Node::Node() = default;
 
-        dis(generator); // generation of random number with unifrom distribution looks like this
+Treap::Node::Node(int key, int priority) : key(key), priority(priority) {
+}
+
+Treap::Node::~Node() {
+    delete left;
+    delete right;
+}
+
+Treap::Node *Treap::merge(Treap::Node *t1, Treap::Node *t2) {
+    if (!t1)
+        return t2;
+    if (!t2)
+        return t1;
+    if (t1->priority > t2->priority) {
+        t1->right = merge(t1->right, t2);
+        return t1;
+    } else {
+        t2->left = merge(t1, t2->left);
+        return t2;
     }
+}
 
-    struct Node {
-        int key, priority;
-        Node *left = nullptr, *right = nullptr;
-        
-        Node() = default;
-        
-        Node(int key) : key(key), priority(generator()) {}
-        
-        Node(int key, int priority) : key(key), priority(priority) {}
-
-        ~Node() {
-            delete left;
-            delete right;
-        }
-    };
-
-    Node *root_ = nullptr;
-
-    static Node *merge(Node *t1, Node *t2) {
-        if (!t1)
-            return t2;
-        if (!t2)
-            return t1;
-        if (t1->priority > t2->priority) {
-            t1->right = merge(t1->right, t2);
-            return t1;
-        } else {
-            t2->left = merge(t1, t2->left);
-            return t2;
-        }
+void Treap::split(Treap::Node *t, int key, Treap::Node *&t1, Treap::Node *&t2) {
+    if (!t) {
+        t1 = t2 = nullptr;
+        return;
     }
-
-    static void split(Node *t, int key, Node *&t1, Node *&t2) {
-        if (!t) {
-            t1 = t2 = nullptr;
-            return;
-        }
-        if (t->key < key) {
-            split(t->right, key, t->right, t2);
-            t1 = t;
-        } else {
-            split(t->left, key, t1, t->left);
-            t2 = t;
-        }
+    if (t->key < key) {
+        split(t->right, key, t->right, t2);
+        t1 = t;
+    } else {
+        split(t->left, key, t1, t->left);
+        t2 = t;
     }
+}
 
-    static bool containsImp(int key, Node *node) {
-        if (!node) {
-            return false;
-        }
-        if (node->key == key) {
-            return true;
-        }
-        if (key < node->key) {
-            return containsImp(key, node->left);
-        } else {
-            return containsImp(key, node->right);
-        }
+bool Treap::containsImp(int key, Treap::Node *node) {
+    if (!node) {
+        return false;
     }
-
-    static void getKeysImp(Node *node, vector<int> &keys) {
-        if (node->left) {
-            getKeysImp(node->left, keys);
-        }
-        if (node->right) {
-            getKeysImp(node->right, keys);
-        }
-        keys.push_back(node->key);
+    if (node->key == key) {
+        return true;
     }
-
- public:
-    Treap() = default;
-    
-    void insert(int key) {
-        Node *less, *greater;
-        split(root_, key, less, greater);
-        less = merge(less, new Node(key));
-        root_ = merge(less, greater);
+    if (key < node->key) {
+        return containsImp(key, node->left);
+    } else {
+        return containsImp(key, node->right);
     }
+}
 
-    void remove(int key) {
-        Node *less, *equal, *greater;
-        split(root_, key, less, greater);
-        split(greater, key + 1, equal, greater);
-        root_ = merge(less, greater);
+void Treap::getKeysImp(Treap::Node *node, vector<int> &keys) {
+    if (node->left) {
+        getKeysImp(node->left, keys);
     }
-
-    bool contains(int key) {
-        return containsImp(key, root_);
+    if (node->right) {
+        getKeysImp(node->right, keys);
     }
+    keys.push_back(node->key);
+}
 
-    vector<int> getKeys() {
-        vector<int> keys;
-        getKeysImp(root_, keys);
-        return keys;
-    }
+Treap::Treap(): generator_(rd_()) {}
 
-    ~Treap() {
-        delete root_;
-    }
-};
+void Treap::insert(int key) {
+    Treap::Node *less, *greater;
+    split(root_, key, less, greater);
+    less = merge(less, new Node(key, dist_(generator_)));
+    root_ = merge(less, greater);
+}
 
-minstd_rand Treap::generator;
+void Treap::remove(int key) {
+    Treap::Node *less, *equal, *greater;
+    split(root_, key, less, greater);
+    split(greater, key + 1, equal, greater);
+    root_ = merge(less, greater);
+}
+
+bool Treap::contains(int key) {
+    return containsImp(key, root_);
+}
+
+vector<int> Treap::getKeys() {
+    vector<int> keys;
+    getKeysImp(root_, keys);
+    return keys;
+}
+
+Treap::~Treap() {
+    delete root_;
+}

@@ -1,5 +1,5 @@
-#include "../Treap.cpp" // PR: it is not really nice to include
-                        // source files somwhere
+//#include "../Treap.h" // PR: it is not really nice to include
+#include "../Treap.h"                      // source files somwhere
                         // maybe we can split our class to source and header part?
 #include <exception>
 #include <gtest/gtest.h>
@@ -8,7 +8,7 @@
 using namespace std;
 
 void test(vector<int> keys) {
-    Treap t = Treap(); // PR: this is value init for class
+    Treap t{}; // PR: this is value init for class
                        // in this case it works fine and default destructor called
                        // but we don't like this method of initialization for classes
                        // you need to consider too many nuances 
@@ -45,7 +45,7 @@ TEST(Test3, Test3) {
 }
 
 int main(int argc, char **argv) {
-    ::testing::InitGoogleTest(&argc, argv); // PR '::somename' it is just synonimous
+    testing::InitGoogleTest(&argc, argv); // PR '::somename' it is just synonimous
                                             // for global namespace and it is redundant
     return RUN_ALL_TESTS();
 }
