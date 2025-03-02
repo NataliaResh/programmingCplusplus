@@ -67,6 +67,16 @@ TEST(Test7, Test7) {
     ASSERT_FALSE(line == nullopt);
 }
 
+TEST(ReviewTest, TrickyFloats) {
+    auto line = Line::createLineFromCoeffs(1e-7, 1e-7, 1e-7);
+
+    ASSERT_TRUE(line != std::nullopt);
+
+    // check that given line coeffs are not zeroes at once with given prescision
+    // but in this example all coeffs will be zeroes(
+    ASSERT_TRUE((std::fabs(line->a()) + std::fabs(line->b()) + std::fabs(line->c())) > e);
+}
+
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv); // PR: again redundant '::'
     return RUN_ALL_TESTS();
