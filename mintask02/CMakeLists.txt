@@ -18,6 +18,8 @@ enable_testing()
 add_executable(
   test_suite
   tests/test_suite.cpp
+  Point.cpp
+  Line.cpp
 )
 
 target_link_libraries(
@@ -27,3 +29,12 @@ target_link_libraries(
 
 include(GoogleTest)
 gtest_discover_tests(test_suite)
+
+option(ENABLE_SANITIZERS "Enable Address, Undefined Behavior, and Memory Leak sanitizers" OFF)
+if (ENABLE_SANITIZERS)
+    set(SANITIZER_FLAGS "-fsanitize=leak,address,undefined") # set variable to list of options
+    target_compile_options(test_suite PRIVATE ${SANITIZER_FLAGS}) # add compile options listed above to test_suite target
+    target_link_options(test_suite PRIVATE ${SANITIZER_FLAGS}) # also you need list these options while linking files
+endif()
+
+
