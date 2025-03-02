@@ -1,6 +1,6 @@
 CC := g++ -Wall -Wextra -Werror
 line := line
-cmake := cmake -S . -B build 
+cmake := cmake -DENABLE_SANITIZERS=ON -S . -B build
 rm := rm -f
 
 .PHONY: all test clean
@@ -11,7 +11,7 @@ test:
 	cd build/ && ./test_suite
 
 $(line): $(test)
-	clear && $(CC) $(line).cpp -o build/line -fsanitize=address
+	clear && $(CC) *.cpp -o build/line 
 	./build/line
 
 clean:
