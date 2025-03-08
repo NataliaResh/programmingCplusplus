@@ -1,6 +1,6 @@
 CC := g++ -Wall -Wextra -Werror
-sp := ScopedPointer
-cmake := cmake -S . -B build 
+pointer := pointer
+cmake := cmake -DENABLE_SANITIZERS=ON -S . -B build
 rm := rm -f
 
 .PHONY: all test clean
@@ -10,9 +10,9 @@ test:
 	cd build/ && make
 	cd build/ && ./test_suite
 
-$(sp): $(test)
-	clear && $(CC) $(sp).cpp -o build/sp -fsanitize=address
-	./build/sp
+$(pointer): $(test)
+	clear && $(CC) *.cpp -o build/pointer
+	./build/pointer
 
 clean:
 	rm -rf ./build/

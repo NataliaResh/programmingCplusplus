@@ -1,4 +1,5 @@
-#include "../ScopedPointer.cpp"
+#include "../ScopedPointerCopy.h"
+#include "../ScopedPointerMove.h"
 #include <exception>
 #include <gtest/gtest.h>
 #include <string>
@@ -12,6 +13,7 @@ void testCopy() {
   ScopedPointerCopy sp2 = sp;
   sp2->x = 1;
   EXPECT_EQ(sp->x, 13);
+  EXPECT_EQ(sp2->x, 1);
 }
 
 void testMove() {
