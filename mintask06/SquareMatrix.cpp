@@ -1,167 +1,165 @@
-#include <algorithm>
-#include <vector>
+#include "SquareMatrix.h"
 
-class SquareMatrix {
-    struct Array {
-        double **array = nullptr;
-        size_t i;
+SquareMatrix::Array::Array(double **array, size_t i) : array(array), i(i) {
+}
 
-        Array(double **array, size_t i) : array(array), i(i) {
-        }
+double &SquareMatrix::Array::operator[](size_t j) {
+    return array[i][j];
+}
 
-        double &operator[](size_t j) {
-            return array[i][j];
-        }
+double **SquareMatrix::zeroMatrix(size_t size) {
+    double **zero = new double *[size];
+    for (size_t i = 0; i < size; i++) {
+        zero[i] = new double[size];
+        for (size_t j = 0; j < size; j++)
+            zero[i][j] = 0;
+    }
+    return zero;
+}
+
+void SquareMatrix::copyMatrix(double **matrix, size_t size) {
+    deleteMatrix();
+    size_ = size;
+    matrix_ = new double *[size];
+    for (size_t i = 0; i < size; i++) {
+        matrix_[i] = new double[size];
+        for (size_t j = 0; j < size; j++)
+            matrix_[i][j] = matrix[i][j];
+    }
+}
+
+void SquareMatrix::deleteMatrix() {
+    if (matrix_ == nullptr) {
+        return;
+    }
+    for (size_t i = 0; i < size_; i++) {
+        delete[] matrix_[i];
+    }
+    delete[] matrix_; 
+}
+
+size_t SquareMatrix::size() const {
+    return size_;
+}
+
+SquareMatrix::SquareMatrix(int size) : size_(size), matrix_(zeroMatrix(size)) {
+}
+
+
+SquareMatrix::SquareMatrix(std::vector<double> vec)
+    : size_(vec.size()), matrix_(zeroMatrix(vec.size())) {
+    for (size_t i = 0; i < size_; i++)
+        matrix_[i][i] = vec[i];
+}
+
+SquareMatrix::SquareMatrix(std::vector<double> &vec)
+    : size_(vec.size()), matrix_(zeroMatrix(vec.size())) {
+    for (size_t i = 0; i < size_; i++)
+        matrix_[i][i] = vec[i];
+}
+
+SquareMatrix::SquareMatrix(const SquareMatrix &other) {
+    copyMatrix(other.matrix_, other.size_);
+}
+
+SquareMatrix &SquareMatrix::operator=(const SquareMatrix &other) {
+    if (this != &other)
+        copyMatrix(other.matrix_, other.size_);
+    return *this;
+}
+
+SquareMatrix::SquareMatrix(SquareMatrix &&other) {
+    deleteMatrix();
+    matrix_ = other.matrix_;
+    size_ = other.size_;
+    other.matrix_ = nullptr;
+    other.size_ = 0;
+}
+
+SquareMatrix &SquareMatrix::operator=(SquareMatrix &&other) {
+   if (this != &other) {
+       deleteMatrix();
+       matrix_ = other.matrix_;
+       size_ = other.size_;
+       other.matrix_ = nullptr;
+       other.size_ = 0;
+   }
+    return *this;
+}
+
+SquareMatrix::operator double() const {
+    double ans = 0;
+    for (size_t i = 0; i < size_; i++)
+        for (size_t j = 0; j < size_; j++)
+            ans += matrix_[i][j];
+    return ans;
+}
+
+SquareMatrix SquareMatrix::operator+(const SquareMatrix &right) {
+    if (size_ != right.size_) {
+        exit(1);
     };
+    SquareMatrix result = *this;
+    for (size_t i = 0; i < size_; i++)
+        for (size_t j = 0; j < size_; j++)
+            result.matrix_[i][j] = matrix_[i][j] + right.matrix_[i][j];
+    return result;
+}
 
-    double **matrix_ = nullptr;
-    size_t size_ = 0;
+SquareMatrix SquareMatrix::operator+=(const SquareMatrix &right) {
+    *this = *this + right;
+    return *this;
+}
 
-    static double **zeroMatrix(size_t size) {
-        double **zero = new double *[size];
-        for (size_t i = 0; i < size; i++) {
-            zero[i] = new double[size];
-            for (size_t j = 0; j < size; j++)
-                zero[i][j] = 0;
-        }
-        return zero;
-    }
+SquareMatrix SquareMatrix::operator*(const SquareMatrix &right) {
+    if (size_ != right.size_) {
+        exit(1);
+    };
+    SquareMatrix result = SquareMatrix(size_);
+    for (size_t i = 0; i < size_; i++)
+        for (size_t j = 0; j < size_; j++)
+            for (size_t k = 0; k < size_; k++)
+                result.matrix_[i][j] += matrix_[i][k] * right.matrix_[k][j];
+    return result;
+}
 
-    void copyMatrix(double **matrix, size_t size) {
-        deleteMatrix();
-        size_ = size;
-        matrix_ = new double *[size];
-        for (size_t i = 0; i < size; i++) {
-            matrix_[i] = new double[size];
-            for (size_t j = 0; j < size; j++)
-                matrix_[i][j] = matrix[i][j];
-        }
-    }
+SquareMatrix SquareMatrix::operator*=(const SquareMatrix &right) {
+    *this = *this * right;
+    return *this;
+}
 
-    void deleteMatrix() {
-        for (size_t i = 0; i < size_; i++) {
-            delete[] matrix_[i];
-        }
-        delete[] matrix_;
-    }
+SquareMatrix SquareMatrix::operator*(double right) {
+    SquareMatrix result = *this;
+    for (size_t i = 0; i < size_; i++)
+        for (size_t j = 0; j < size_; j++)
+            result.matrix_[i][j] = matrix_[i][j] * right;
+    return result;
+}
 
-  public:
-    const size_t size() const {
-        return size_;
-    }
+SquareMatrix SquareMatrix::operator*=(double right) {
+    *this = *this * right;
+    return *this;
+}
 
-    SquareMatrix(int size) : size_(size), matrix_(zeroMatrix(size)) {
-    }
+bool SquareMatrix::operator==(const SquareMatrix &right) {
+    if (size_ != right.size_)
+        return false;
+    for (size_t i = 0; i < size_; i++)
+        for (size_t j = 0; j < size_; j++)
+            if (matrix_[i][j] != right.matrix_[i][j])
+                return false;
+    return true;
+}
 
-    SquareMatrix(std::vector<double> vec) : size_(vec.size()), matrix_(zeroMatrix(vec.size())) {
-        for (size_t i = 0; i < size_; i++)
-            matrix_[i][i] = vec[i];
-    }
+bool SquareMatrix::operator!=(const SquareMatrix &right) {
+    return !(*this == right);
+}
 
-    SquareMatrix(std::vector<double> &vec) : size_(vec.size()), matrix_(zeroMatrix(vec.size())) {
-        for (size_t i = 0; i < size_; i++)
-            matrix_[i][i] = vec[i];
-    }
+SquareMatrix::Array SquareMatrix::operator[](int i) {
+    Array array(matrix_, i);
+    return array;
+}
 
-    SquareMatrix(const SquareMatrix &other) {
-        copyMatrix(other.matrix_, other.size_);
-    }
-
-    SquareMatrix &operator=(const SquareMatrix &other) {
-        if (this != &other)
-            copyMatrix(other.matrix_, other.size_);
-        return *this;
-    }
-
-    SquareMatrix(SquareMatrix &&other) {
-        copyMatrix(other.matrix_, other.size_);
-        other.matrix_ = nullptr;
-        other.size_ = 0;
-    }
-
-    SquareMatrix &operator=(SquareMatrix &&other) {
-        if (this != &other) {
-            copyMatrix(other.matrix_, other.size_);
-            other.matrix_ = nullptr;
-            other.size_ = 0;
-        }
-        return *this;
-    }
-
-    explicit operator double() const {
-        double ans = 0;
-        for (size_t i = 0; i < size_; i++)
-            for (size_t j = 0; j < size_; j++)
-                ans += matrix_[i][j];
-        return ans;
-    }
-
-    SquareMatrix operator+(const SquareMatrix &right) {
-        if (size_ != right.size_) {
-            exit(1);
-        };
-        SquareMatrix result = *this;
-        for (size_t i = 0; i < size_; i++)
-            for (size_t j = 0; j < size_; j++)
-                result.matrix_[i][j] = matrix_[i][j] + right.matrix_[i][j];
-        return result;
-    }
-
-    SquareMatrix operator+=(const SquareMatrix &right) {
-        *this = *this + right;
-        return *this;
-    }
-
-    SquareMatrix operator*(const SquareMatrix &right) {
-        if (size_ != right.size_) {
-            exit(1);
-        };
-        SquareMatrix result = SquareMatrix(size_);
-        for (size_t i = 0; i < size_; i++)
-            for (size_t j = 0; j < size_; j++)
-                for (size_t k = 0; k < size_; k++)
-                    result.matrix_[i][j] += matrix_[i][k] * right.matrix_[k][j];
-        return result;
-    }
-
-    SquareMatrix operator*=(const SquareMatrix &right) {
-        *this = *this * right;
-        return *this;
-    }
-
-    SquareMatrix operator*(double right) {
-        SquareMatrix result = *this;
-        for (size_t i = 0; i < size_; i++)
-            for (size_t j = 0; j < size_; j++)
-                result.matrix_[i][j] = matrix_[i][j] * right;
-        return result;
-    }
-
-    SquareMatrix operator*=(double right) {
-        *this = *this * right;
-        return *this;
-    }
-
-    bool operator==(const SquareMatrix &right) {
-        if (size_ != right.size_)
-            return false;
-        for (size_t i = 0; i < size_; i++)
-            for (size_t j = 0; j < size_; j++)
-                if (matrix_[i][j] != right.matrix_[i][j])
-                    return false;
-        return true;
-    }
-
-    bool operator!=(const SquareMatrix &right) {
-        return !(*this == right);
-    }
-
-    Array operator[](int i) {
-        Array array(matrix_, i);
-        return array;
-    }
-
-    ~SquareMatrix() {
-        deleteMatrix();
-    }
-};
+SquareMatrix::~SquareMatrix() {
+    deleteMatrix();
+}

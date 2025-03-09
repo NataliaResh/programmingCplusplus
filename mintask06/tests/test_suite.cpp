@@ -1,4 +1,4 @@
-#include "../SquareMatrix.cpp"
+#include "../SquareMatrix.h"
 #include <exception>
 #include <gtest/gtest.h>
 
@@ -28,6 +28,6 @@ TEST(Test0, Test0) {
 }
 
 int main(int argc, char **argv) {
-    ::testing::InitGoogleTest(&argc, argv);
+    testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }
