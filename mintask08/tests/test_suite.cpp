@@ -1,4 +1,5 @@
-#include "../IO.cpp"
+#include "../ReaderWriterFile.h"
+#include "../ReaderWriterString.h"
 #include <exception>
 #include <gtest/gtest.h>
 #include <string>

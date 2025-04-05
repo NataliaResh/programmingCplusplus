@@ -10,5 +10,5 @@ class IO {
   public:
     virtual bool open() = 0;
     virtual bool close() = 0;
-    virtual bool eof() = 0;
+    virtual bool eof() const = 0;
 };
