@@ -1,6 +1,6 @@
 CC := g++ -Wall -Wextra -Werror
 matrix := SquareMatrix
-cmake := cmake -S . -B build 
+cmake := cmake -DENABLE_SANITIZERS=ON -S . -B build
 rm := rm -f
 
 .PHONY: all test clean
@@ -10,8 +10,8 @@ test:
 	cd build/ && make
 	cd build/ && ./test_suite
 
-$(treap): $(test)
-	clear && $(CC) $(matrix).cpp -o build/matrix -fsanitize=address
+$(matrix): $(test)
+	clear && $(CC) *.cpp -o build/matrix
 	./build/matrix
 
 clean:
