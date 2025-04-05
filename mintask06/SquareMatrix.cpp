@@ -45,14 +45,13 @@ size_t SquareMatrix::size() const {
 SquareMatrix::SquareMatrix(int size) : size_(size), matrix_(zeroMatrix(size)) {
 }
 
-
-SquareMatrix::SquareMatrix(std::vector<double> vec)
+SquareMatrix::SquareMatrix(std::vector<double> &vec)
     : size_(vec.size()), matrix_(zeroMatrix(vec.size())) {
     for (size_t i = 0; i < size_; i++)
         matrix_[i][i] = vec[i];
 }
 
-SquareMatrix::SquareMatrix(std::vector<double> &vec)
+SquareMatrix::SquareMatrix(std::vector<double> &&vec)
     : size_(vec.size()), matrix_(zeroMatrix(vec.size())) {
     for (size_t i = 0; i < size_; i++)
         matrix_[i][i] = vec[i];
@@ -95,14 +94,14 @@ SquareMatrix::operator double() const {
     return ans;
 }
 
-SquareMatrix SquareMatrix::operator+(const SquareMatrix &right) {
-    if (size_ != right.size_) {
+SquareMatrix operator+(const SquareMatrix& left, const SquareMatrix &right) {
+    if (left.size_ != right.size_) {
         exit(1);
     };
-    SquareMatrix result = *this;
-    for (size_t i = 0; i < size_; i++)
-        for (size_t j = 0; j < size_; j++)
-            result.matrix_[i][j] = matrix_[i][j] + right.matrix_[i][j];
+    SquareMatrix result = left;
+    for (size_t i = 0; i < left.size_; i++)
+        for (size_t j = 0; j < left.size_; j++)
+            result.matrix_[i][j] = left.matrix_[i][j] + right.matrix_[i][j];
     return result;
 }
 
@@ -111,15 +110,15 @@ SquareMatrix SquareMatrix::operator+=(const SquareMatrix &right) {
     return *this;
 }
 
-SquareMatrix SquareMatrix::operator*(const SquareMatrix &right) {
-    if (size_ != right.size_) {
+SquareMatrix operator*(const SquareMatrix& left, const SquareMatrix &right) {
+    if (left.size_ != right.size_) {
         exit(1);
     };
-    SquareMatrix result = SquareMatrix(size_);
-    for (size_t i = 0; i < size_; i++)
-        for (size_t j = 0; j < size_; j++)
-            for (size_t k = 0; k < size_; k++)
-                result.matrix_[i][j] += matrix_[i][k] * right.matrix_[k][j];
+    SquareMatrix result = SquareMatrix(left.size_);
+    for (size_t i = 0; i < left.size_; i++)
+        for (size_t j = 0; j < left.size_; j++)
+            for (size_t k = 0; k < left.size_; k++)
+                result.matrix_[i][j] += left.matrix_[i][k] * right.matrix_[k][j];
     return result;
 }
 
@@ -136,23 +135,27 @@ SquareMatrix SquareMatrix::operator*(double right) {
     return result;
 }
 
+SquareMatrix operator*(double left, SquareMatrix& matrix) {
+    return matrix * left;
+}
+
 SquareMatrix SquareMatrix::operator*=(double right) {
     *this = *this * right;
     return *this;
 }
 
-bool SquareMatrix::operator==(const SquareMatrix &right) {
-    if (size_ != right.size_)
+bool operator==(const SquareMatrix& left, const SquareMatrix &right) {
+    if (left.size_ != right.size_)
         return false;
-    for (size_t i = 0; i < size_; i++)
-        for (size_t j = 0; j < size_; j++)
-            if (matrix_[i][j] != right.matrix_[i][j])
+    for (size_t i = 0; i < left.size_; i++)
+        for (size_t j = 0; j < left.size_; j++)
+            if (left.matrix_[i][j] != right.matrix_[i][j])
                 return false;
     return true;
 }
 
-bool SquareMatrix::operator!=(const SquareMatrix &right) {
-    return !(*this == right);
+bool operator!=(const SquareMatrix& left, const SquareMatrix &right) {
+    return !(left == right);
 }
 
 SquareMatrix::Array SquareMatrix::operator[](int i) {
