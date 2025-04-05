@@ -35,7 +35,7 @@ void SquareMatrix::deleteMatrix() {
     for (size_t i = 0; i < size_; i++) {
         delete[] matrix_[i];
     }
-    delete[] matrix_; 
+    delete[] matrix_;
 }
 
 size_t SquareMatrix::size() const {
@@ -76,13 +76,13 @@ SquareMatrix::SquareMatrix(SquareMatrix &&other) {
 }
 
 SquareMatrix &SquareMatrix::operator=(SquareMatrix &&other) {
-   if (this != &other) {
-       deleteMatrix();
-       matrix_ = other.matrix_;
-       size_ = other.size_;
-       other.matrix_ = nullptr;
-       other.size_ = 0;
-   }
+    if (this != &other) {
+        deleteMatrix();
+        matrix_ = other.matrix_;
+        size_ = other.size_;
+        other.matrix_ = nullptr;
+        other.size_ = 0;
+    }
     return *this;
 }
 
@@ -94,7 +94,7 @@ SquareMatrix::operator double() const {
     return ans;
 }
 
-SquareMatrix operator+(const SquareMatrix& left, const SquareMatrix &right) {
+SquareMatrix operator+(const SquareMatrix &left, const SquareMatrix &right) {
     if (left.size_ != right.size_) {
         exit(1);
     };
@@ -110,7 +110,7 @@ SquareMatrix SquareMatrix::operator+=(const SquareMatrix &right) {
     return *this;
 }
 
-SquareMatrix operator*(const SquareMatrix& left, const SquareMatrix &right) {
+SquareMatrix operator*(const SquareMatrix &left, const SquareMatrix &right) {
     if (left.size_ != right.size_) {
         exit(1);
     };
@@ -135,7 +135,7 @@ SquareMatrix SquareMatrix::operator*(double right) {
     return result;
 }
 
-SquareMatrix operator*(double left, SquareMatrix& matrix) {
+SquareMatrix operator*(double left, SquareMatrix &matrix) {
     return matrix * left;
 }
 
@@ -144,7 +144,7 @@ SquareMatrix SquareMatrix::operator*=(double right) {
     return *this;
 }
 
-bool operator==(const SquareMatrix& left, const SquareMatrix &right) {
+bool operator==(const SquareMatrix &left, const SquareMatrix &right) {
     if (left.size_ != right.size_)
         return false;
     for (size_t i = 0; i < left.size_; i++)
@@ -154,7 +154,7 @@ bool operator==(const SquareMatrix& left, const SquareMatrix &right) {
     return true;
 }
 
-bool operator!=(const SquareMatrix& left, const SquareMatrix &right) {
+bool operator!=(const SquareMatrix &left, const SquareMatrix &right) {
     return !(left == right);
 }
 

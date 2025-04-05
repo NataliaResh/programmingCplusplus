@@ -2,7 +2,6 @@
 #include <algorithm>
 #include <vector>
 
-
 class SquareMatrix {
     struct Array {
         double **array = nullptr;
@@ -26,9 +25,9 @@ class SquareMatrix {
     size_t size() const;
 
     SquareMatrix(int size);
-     
+
     SquareMatrix(std::vector<double> &vec);
-    
+
     SquareMatrix(std::vector<double> &&vec);
 
     SquareMatrix(const SquareMatrix &other);
@@ -41,35 +40,35 @@ class SquareMatrix {
 
     explicit operator double() const;
 
-    friend SquareMatrix operator+(const SquareMatrix& left, const SquareMatrix &right);
+    friend SquareMatrix operator+(const SquareMatrix &left, const SquareMatrix &right);
 
     SquareMatrix operator+=(const SquareMatrix &right);
 
-    friend SquareMatrix operator*(const SquareMatrix& left, const SquareMatrix &right);
+    friend SquareMatrix operator*(const SquareMatrix &left, const SquareMatrix &right);
 
     SquareMatrix operator*=(const SquareMatrix &right);
 
     SquareMatrix operator*(double right);
 
-    friend SquareMatrix operator*(double left, SquareMatrix& matrix);
+    friend SquareMatrix operator*(double left, SquareMatrix &matrix);
 
     SquareMatrix operator*=(double right);
 
-    friend bool operator==(const SquareMatrix& left, const SquareMatrix &right);
+    friend bool operator==(const SquareMatrix &left, const SquareMatrix &right);
 
-    friend bool operator!=(const SquareMatrix& left, const SquareMatrix &right);
+    friend bool operator!=(const SquareMatrix &left, const SquareMatrix &right);
 
     Array operator[](int i);
 
     ~SquareMatrix();
 };
 
-SquareMatrix operator*(double left, SquareMatrix& matrix);
+SquareMatrix operator*(double left, SquareMatrix &matrix);
 
-SquareMatrix operator+(const SquareMatrix& left, const SquareMatrix& right);
+SquareMatrix operator+(const SquareMatrix &left, const SquareMatrix &right);
 
-SquareMatrix operator*(const SquareMatrix& left, const SquareMatrix& right);
+SquareMatrix operator*(const SquareMatrix &left, const SquareMatrix &right);
 
-bool operator==(const SquareMatrix& left, const SquareMatrix& right);
+bool operator==(const SquareMatrix &left, const SquareMatrix &right);
 
-bool operator!=(const SquareMatrix& left, const SquareMatrix& right);
+bool operator!=(const SquareMatrix &left, const SquareMatrix &right);
