@@ -2,4 +2,4 @@
 #include "Reader.h"
 #include "Writer.h"
 
-class ReaderWriter : public Reader, public Writer {};
+class ReaderWriter : virtual public Reader, virtual public Writer, virtual public IO {};

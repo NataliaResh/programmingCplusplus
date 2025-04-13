@@ -22,6 +22,18 @@ add_executable(
   Writer.cpp
   ReaderWriterString.cpp
   ReaderWriterFile.cpp
+        IOString.cpp
+        IOString.h
+        ReaderString.cpp
+        ReaderString.h
+        WriterString.cpp
+        WriterString.h
+        IOFile.cpp
+        IOFile.h
+        ReaderFile.cpp
+        ReaderFile.h
+        WriterFile.cpp
+        WriterFile.h
 )
 
 target_link_libraries(

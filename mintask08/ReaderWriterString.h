@@ -1,22 +1,10 @@
 #pragma once
+#include "IOString.h"
+#include "ReaderString.h"
 #include "ReaderWriter.h"
+#include "WriterString.h"
 
-class ReaderWriterString : public ReaderWriter {
-    std::string source_;
-    size_t position_ = 0;
-
+class ReaderWriterString : public ReaderWriter, public ReaderString, public WriterString {
   public:
-    explicit ReaderWriterString(std::string source);
-
-    bool open() override;
-
-    bool close() override;
-
-    bool eof() const override;
-
-    std::byte readByte() override;
-
-    void writeByte(std::byte byte) override;
-
-    std::string getString() const;
+    explicit ReaderWriterString(const std::string& source);
 };

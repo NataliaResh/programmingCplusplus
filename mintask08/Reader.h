@@ -3,6 +3,8 @@
 #include <string>
 
 class Reader : virtual public IO {
+  protected:
+    virtual std::byte readByte() = 0;
   public:
     template <typename T> T read() {
         size_t size = sizeof(T);

@@ -3,6 +3,8 @@
 #include <string>
 
 class Writer : virtual public IO {
+  protected:
+    virtual void writeByte(std::byte byte) = 0;
   public:
     template <typename T> void write(T input) {
         size_t size = sizeof(T);
