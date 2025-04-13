@@ -11,8 +11,7 @@ Let::operator std::string() const {
 
 Expression* Let::eval() {
     std::map<std::string, Expression*> env;
-    env.insert({id_, e_value_});
-    return e_body_->eval(env);
+    return eval(env);
 }
 
 Expression* Let::eval(std::map<std::string, Expression*> env) {

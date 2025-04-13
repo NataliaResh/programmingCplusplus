@@ -9,16 +9,8 @@ Call::operator std::string() const {
 }
 
 Expression* Call::eval() {
-    Expression* f_exp = f_exp_->eval();
-    if (typeid(*f_exp) != typeid(Function)) {
-        throw ExpressionException("Can't call no function!");
-    }
-    Function* func = dynamic_cast<Function*>(f_exp_->eval());
-    Expression* arg = arg_exp_->eval(env);
-    env.insert({func->id_, arg});
-    Expression* result = func->e_body_->eval(env);
-    delete arg;
-    return result;
+    std::map<std::string, Expression*> env;
+    return eval(env);
 }
 
 Expression* Call::eval(std::map<std::string, Expression*> env) {

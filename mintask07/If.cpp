@@ -11,16 +11,8 @@ If::operator std::string() const {
 }
 
 Expression* If::eval() {
-    Expression* value_1 = e1_->eval();
-    Expression* value_2 = e2_->eval();
-    bool result = value_1->get_value() > value_2->get_value();
-    delete value_1;
-    delete value_2;
-    if (result) {
-        return e_then_->eval();
-    } else {
-        return e_else_->eval();
-    }
+    std::map<std::string, Expression*> env;
+    return eval(env);
 }
 
 Expression* If::eval(std::map<std::string, Expression*> env) {

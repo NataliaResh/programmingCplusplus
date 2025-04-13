@@ -16,11 +16,9 @@ Expression* Function::eval(std::map<std::string, Expression*> env) {
 }
 
 Function::~Function() {
-    if (e_body_) {
-        delete e_body_;
-    }
+    delete e_body_;
 }
 
 Expression* Function::copy() {
-	return new Function(id_, e_body_->copy());
+    return new Function(id_, e_body_->copy());
 }

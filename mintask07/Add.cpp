@@ -9,12 +9,8 @@ Add::operator std::string() const {
 }
 
 Expression* Add::eval() {
-    Expression* value_1 = exp1_->eval();
-    Expression* value_2 = exp2_->eval();
-    int result = value_1->get_value() + value_2->get_value();
-    delete value_1;
-    delete value_2;
-    return new Val(result);
+    std::map<std::string, Expression*> env;
+    return eval(env);
 }
 
 Expression* Add::eval(std::map<std::string, Expression*> env) {
