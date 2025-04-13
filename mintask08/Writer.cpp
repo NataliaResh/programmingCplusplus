@@ -1,6 +1,6 @@
 #include "Writer.h"
 
-void Writer::writeString(std::string input) {
+void Writer::writeString(const std::string& input) {
     for (auto& byte : input) {
         writeByte(static_cast<std::byte>(byte));
     }

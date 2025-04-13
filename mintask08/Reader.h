@@ -7,7 +7,7 @@ class Reader : virtual public IO {
     template <typename T> T read() {
         size_t size = sizeof(T);
         T output;
-        std::byte* bytes = reinterpret_cast<std::byte*>(&output);
+        auto* bytes = reinterpret_cast<std::byte*>(&output);
         for (size_t i = 0; i < size; i++) {
             bytes[i] = readByte();
         }

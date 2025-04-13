@@ -1,25 +1,25 @@
 #pragma once
 #include "ReaderWriter.h"
 #include <fstream>
-#include <stdio.h>
+#include <cstdio>
 
 class ReaderWriterFile : public ReaderWriter {
     const char* fileName_;
-    FILE* source_;
+    FILE* source_{};
     const char* mode_;
 
   public:
     ReaderWriterFile(const char* fileName, const char* mode);
 
-    bool open();
+    bool open() override;
 
-    bool close();
+    bool close() override;
 
-    bool eof() const;
+    bool eof() const override;
 
-    std::byte readByte();
+    std::byte readByte() override;
 
-    void writeByte(std::byte byte);
+    void writeByte(std::byte byte) override;
 
     ~ReaderWriterFile();
 };

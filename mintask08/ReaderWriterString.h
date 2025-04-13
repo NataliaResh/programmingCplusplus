@@ -2,21 +2,21 @@
 #include "ReaderWriter.h"
 
 class ReaderWriterString : public ReaderWriter {
-    std::string source_ = "";
+    std::string source_;
     size_t position_ = 0;
 
   public:
-    ReaderWriterString(std::string source);
+    explicit ReaderWriterString(std::string source);
 
-    bool open();
+    bool open() override;
 
-    bool close();
+    bool close() override;
 
-    bool eof() const;
+    bool eof() const override;
 
-    std::byte readByte();
+    std::byte readByte() override;
 
-    void writeByte(std::byte byte);
+    void writeByte(std::byte byte) override;
 
     std::string getString() const;
 };

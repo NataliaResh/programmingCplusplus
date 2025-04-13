@@ -1,6 +1,8 @@
 #include "ReaderWriterString.h"
 
-ReaderWriterString::ReaderWriterString(std::string source) : source_(source) {
+#include <utility>
+
+ReaderWriterString::ReaderWriterString(std::string source) : source_(std::move(source)) {
 }
 
 bool ReaderWriterString::open() {
