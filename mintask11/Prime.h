@@ -16,7 +16,3 @@ struct Prime : PrimeLoop<Prime<N - 1>{} + 1> {};
 
 template <>
 struct Prime<1> : std::integral_constant<int, 2> {};
-
-int main() {
-    std::cout << Prime<50>{} << "\n";
-}
