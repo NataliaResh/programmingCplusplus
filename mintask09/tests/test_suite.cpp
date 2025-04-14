@@ -1,4 +1,4 @@
-#include "../Treap.cpp"
+#include "../Treap.h"
 #include <exception>
 #include <gtest/gtest.h>
 #include <string>
@@ -10,9 +10,9 @@ void test(vector<int> keys) {
     for (int i = 0; i < keys.size(); i++) {
         t.insert(keys[i]);
     }
-    vector<int> *currentKeys = t.getKeys();
-    EXPECT_EQ(keys.size(), currentKeys->size());
-    for (int i = 0; i < currentKeys->size(); i++) {
+    vector<int> currentKeys = t.getKeys();
+    EXPECT_EQ(keys.size(), currentKeys.size());
+    for (int i = 0; i < currentKeys.size(); i++) {
         EXPECT_EQ(t.contains(keys[i]), true);
     }
     Treap t2 = Treap(t);
@@ -25,8 +25,6 @@ void test(vector<int> keys) {
     EXPECT_EQ(t.contains(20), false);
     EXPECT_EQ(t3.contains(20), true);
     EXPECT_EQ(t3.contains(20), true);
-
-    delete currentKeys;
 }
 
 Treap<int> createTreap(int size) {
@@ -93,6 +91,15 @@ TEST(Test5, Test5) {
 TEST(Test6, Test6) {
   testMove2();
 }
+
+TEST(Test7, Test7) {
+    Treap<char> t{};
+    t.insert('a');
+    t.insert('b');
+    EXPECT_TRUE(t.contains('a')); 
+    EXPECT_TRUE(t.contains('b'));
+}
+
 int main(int argc, char **argv) {
    ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
