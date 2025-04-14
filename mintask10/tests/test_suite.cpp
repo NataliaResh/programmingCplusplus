@@ -1,4 +1,5 @@
-#include "../Counter.cpp"
+#include "../Counter.h"
+#include "../MaxCountInstances.h"
 #include <exception>
 #include <gtest/gtest.h>
 #include <string>

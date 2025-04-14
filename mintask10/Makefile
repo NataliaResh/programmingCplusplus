@@ -1,6 +1,6 @@
 CC := g++ -Wall -Wextra -Werror
 counter := Counter
-cmake := cmake -S . -B build 
+cmake := cmake -DENABLE_SANITIZERS=ON -S . -B build
 rm := rm -f
 
 .PHONY: all test clean
@@ -11,7 +11,7 @@ test:
 	cd build/ && ./test_suite
 
 $(counter): $(test)
-	clear && $(CC) $(counter).cpp -o build/counter -fsanitize=address
+	clear && $(CC) $(counter).cpp -o build/counter
 	./build/counter
 
 clean:
