@@ -5,6 +5,11 @@
 
 using namespace std;
 
+struct Point {
+    int x;
+    int y;
+};
+
 TEST(Test0, Test0) {
     char memory[2] = {0, 0};
     allocate<0>(memory);
@@ -33,6 +38,12 @@ TEST(Test4, Test4) {
     int memory[10];
     allocate<10>(memory, 10, 42, 'a');
     EXPECT_EQ(memory[1], 42);
+}
+
+TEST(Test5, Test5) {
+    char* memory = new char[12];
+    allocate<12>(memory, 'a', Point{3, 4});
+    delete[] memory;
 }
 
 int main(int argc, char **argv) {
