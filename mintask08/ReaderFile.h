@@ -4,7 +4,7 @@
 
 class ReaderFile : virtual public Reader, virtual public IOFile {
   protected:
-    std::byte readByte() override;
+    char readChar() override;
 
   public:
     explicit ReaderFile(const char *fileName);

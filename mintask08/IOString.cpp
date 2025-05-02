@@ -18,7 +18,7 @@ bool IOString::close() {
 }
 
 bool IOString::eof() const {
-    return position_ == source_.size();
+    return position_ == source_.length();
 }
 
 std::string IOString::getString() const {

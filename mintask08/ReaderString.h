@@ -5,7 +5,7 @@
 
 class ReaderString : virtual public Reader, virtual public IOString {
   protected:
-    std::byte readByte() override;
+    char readChar() override;
 
   public:
     explicit ReaderString(std::string source);

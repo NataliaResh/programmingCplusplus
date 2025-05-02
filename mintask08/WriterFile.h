@@ -4,7 +4,7 @@
 
 class WriterFile : virtual public Writer, virtual public IOFile {
   protected:
-    void writeByte(std::byte byte) override;
+    void writeChar(char symbol) override;
 
   public:
     explicit WriterFile(const char* fileName);

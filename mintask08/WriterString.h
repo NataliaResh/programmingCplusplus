@@ -5,7 +5,7 @@
 
 class WriterString : virtual public Writer, virtual public IOString {
   protected:
-    void writeByte(std::byte byte) override;
+    void writeChar(char symbol) override;
 
   public:
     explicit WriterString(std::string source);

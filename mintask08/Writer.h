@@ -1,17 +1,19 @@
 #pragma once
 #include "IO.h"
+#include <sstream>
 #include <string>
 
 class Writer : virtual public IO {
   protected:
-    virtual void writeByte(std::byte byte) = 0;
+    virtual void writeChar(char symbol) = 0;
   public:
-    template <typename T> void write(T input) {
-        size_t size = sizeof(T);
-        auto* bytes = reinterpret_cast<std::byte*>(&input);
-        for (size_t i = 0; i < size; i++) {
-            writeByte(bytes[i]);
+    template <typename T> void write(const T& input) {
+        std::ostringstream string_stream;
+        string_stream << input;
+        for(auto symbol: string_stream.str()) {
+            writeChar(symbol);
         }
+        writeChar(' ');
     }
 
     void writeString(const std::string& input);

@@ -1,8 +1,8 @@
 #include "Writer.h"
 
 void Writer::writeString(const std::string& input) {
-    for (auto& byte : input) {
-        writeByte(static_cast<std::byte>(byte));
+    for (auto& symbol : input) {
+        writeChar(symbol);
     }
-    writeByte(static_cast<std::byte>('\0'));
+    writeChar('\0');
 }
