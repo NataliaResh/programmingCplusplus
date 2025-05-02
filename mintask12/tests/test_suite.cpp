@@ -1,4 +1,4 @@
-#include "../Treap.cpp"
+#include "../Treap.h"
 #include <exception>
 #include <gtest/gtest.h>
 #include <string>
@@ -11,9 +11,9 @@ void test(vector<int> keys) {
     for (int i = 0; i < keys.size(); i++) {
         t.insert(keys[i]);
     }
-    vector<int> *currentKeys = t.getKeys();
-    EXPECT_EQ(keys.size(), currentKeys->size());
-    for (int i = 0; i < currentKeys->size(); i++) {
+    vector<int> currentKeys = t.getKeys();
+    EXPECT_EQ(keys.size(), currentKeys.size());
+    for (int i = 0; i < currentKeys.size(); i++) {
         EXPECT_EQ(t.contains(keys[i]), true);
     }
     Treap t2 = Treap(t);
@@ -36,7 +36,6 @@ void test(vector<int> keys) {
       std::cout << el.key << " ";
     }
     std::cout << "\n";
-    delete currentKeys;
 }
 
 Treap<int> createTreap(int size) {
