@@ -15,10 +15,10 @@ Expression* Call::eval() {
 
 Expression* Call::eval(std::map<std::string, Expression*> env) {
     Expression* f_exp = f_exp_->eval(env);
-    if (typeid(*f_exp) != typeid(Function)) {
+    Function* func = dynamic_cast<Function*>(f_exp_->eval(env));
+    if (func == nullptr) {
         throw ExpressionException("Can't call no function!");
     }
-    Function* func = dynamic_cast<Function*>(f_exp_->eval(env));
     Expression* arg = arg_exp_->eval(env);
     env.insert({func->id_, arg});
     Expression* result = func->e_body_->eval(env);
