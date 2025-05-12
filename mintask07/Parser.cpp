@@ -6,7 +6,7 @@ Expression* Parser::parse(std::string& str) {
 
 Expression* Parser::parse_impl(std::string& str, size_t start, size_t end) {
     if (str[0] != '(' || str[end] != ')') {
-        throw ExpressionException("Incorrect string for parsing!");
+        throw ExpressionException("Incorrect string for parsing! The expression must be in brackets!");
     }
     ++start;
     std::string type = get_word(str, start);
