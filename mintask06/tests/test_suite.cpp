@@ -1,4 +1,4 @@
-#include "../SquareMatrix.cpp"
+#include "../SquareMatrix.h"
 #include <exception>
 #include <gtest/gtest.h>
 
@@ -27,7 +27,41 @@ TEST(Test0, Test0) {
             EXPECT_EQ(m4[i][j], ans[i][j]);
 }
 
+TEST(associativityTest1, Matrix) {
+    SquareMatrix m({1, 2, 3});
+    SquareMatrix p = m * 2;
+    SquareMatrix q = 2 * m;
+    
+    EXPECT_EQ(p, q);
+}
+
+TEST(associativityTest2, Matrix) {
+    SquareMatrix m({1, 2, 3});
+    SquareMatrix p = m  + vector<double>{3, 2, 1};
+    SquareMatrix q = vector<double>{3, 2, 1} + m;
+    
+    EXPECT_EQ(p, q);
+}
+
+TEST(associativityTest3, Matrix) {
+    SquareMatrix m({1, 2, 3});
+    vector<double> v = {1, 2, 3};
+    SquareMatrix p = m * v;
+    SquareMatrix q = v * m;
+
+    EXPECT_EQ(p, q);
+}
+
+TEST(associativityTest4, Matrix) {
+    SquareMatrix m({1, 2, 3});
+
+    bool r1 = vector<double>{1, 2, 3} ==  m;
+    bool r2 = vector<double>{3, 2, 1} != m;
+    EXPECT_TRUE(r1);
+    EXPECT_TRUE(r2);
+}
+
 int main(int argc, char **argv) {
-    ::testing::InitGoogleTest(&argc, argv);
+    testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }
