@@ -61,6 +61,15 @@ TEST(Test3, Test3) {
     testRead(rf);
 }
 
+TEST(Reader, ReadConsecutiveCharacters) {
+    std::string input = "my favorite number is 42";
+
+    ReaderString r {input};
+    r.open();
+    EXPECT_EQ('m', r.read<char>());
+    EXPECT_EQ('y', r.read<char>());
+} 
+
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

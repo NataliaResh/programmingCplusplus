@@ -9,3 +9,8 @@ std::string Reader::readString() {
     }
     return output;
 }
+
+
+template<> char Reader::read<char>(){
+    return readChar();
+}

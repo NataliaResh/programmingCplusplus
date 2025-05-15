@@ -3,19 +3,25 @@
 #include <sstream>
 #include <string>
 
+namespace reader {
+  template <typename T> T read();
+  template <> char read<char>();
+}
+
 class Reader : virtual public IO {
   protected:
     virtual char readChar() = 0;
   public:
     template <typename T> T read() {
-        std::basic_string<char> symbol;
+        char symbol;
         do {
             symbol = readChar();
-        } while(std::isspace(symbol.back()));
-        std::string output(symbol);
+        } while(std::isspace(symbol));
+        std::string output;
+        output += symbol;
         while (!eof()) {
             symbol = readChar();
-            if (std::isspace(symbol.back())) {
+            if (std::isspace(symbol)) {
                 break;
             }
             output += symbol;

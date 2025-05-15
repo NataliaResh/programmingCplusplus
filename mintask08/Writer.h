@@ -16,5 +16,9 @@ class Writer : virtual public IO {
         writeChar(' ');
     }
 
+    void write(const char& input) {
+      writeChar(input);
+    }
+
     void writeString(const std::string& input);
 };
