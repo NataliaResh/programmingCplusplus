@@ -1,5 +1,4 @@
 #include "IndexOfFirstMatch.h"
-#include <iostream>
 #include <cassert>
 
 bool isOdd(int n) {
