@@ -1,19 +1,18 @@
-#include "../Treap.cpp"
+#include "../Treap.h"
 #include <exception>
 #include <gtest/gtest.h>
-#include <string>
 #include <iostream>
 
 using namespace std;
 
 void test(vector<int> keys) {
     Treap t = Treap<int>();
-    for (int i = 0; i < keys.size(); i++) {
-        t.insert(keys[i]);
+    for (int key : keys) {
+        t.insert(key);
     }
-    vector<int> *currentKeys = t.getKeys();
-    EXPECT_EQ(keys.size(), currentKeys->size());
-    for (int i = 0; i < currentKeys->size(); i++) {
+    vector<int> currentKeys = t.getKeys();
+    EXPECT_EQ(keys.size(), currentKeys.size());
+    for (int i = 0; i < currentKeys.size(); i++) {
         EXPECT_EQ(t.contains(keys[i]), true);
     }
     Treap t2 = Treap(t);
@@ -36,12 +35,11 @@ void test(vector<int> keys) {
       std::cout << el.key << " ";
     }
     std::cout << "\n";
-    delete currentKeys;
 }
 
 Treap<int> createTreap(int size) {
     if (size <= 0) {
-      return Treap<int>();
+      return {};
     }
     Treap result = Treap<int>();
     for (int i = 0; i < size; i++) {
@@ -50,15 +48,15 @@ Treap<int> createTreap(int size) {
     return result;
 }
 
-void testMove(vector<int> keys1, vector<int> keys2) {
+void testMove(const vector<int>& keys1, const vector<int>& keys2) {
     Treap t1 = Treap<int>();
-    for (int i = 0; i < keys1.size(); i++) {
-        t1.insert(keys1[i]);
+    for (int i : keys1) {
+        t1.insert(i);
     }
 
     Treap t2 = Treap<int>();
-    for (int i = 0; i < keys2.size(); i++) {
-        t2.insert(keys2[i]);
+    for (int i : keys2) {
+        t2.insert(i);
     }
     
     Treap t3 = t1 + t2;
