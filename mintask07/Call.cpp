@@ -8,11 +8,6 @@ Call::operator std::string() const {
            static_cast<std::string>(*arg_exp_) + ")";
 }
 
-Expression* Call::eval() {
-    std::map<std::string, Expression*> env;
-    return eval(env);
-}
-
 Expression* Call::eval(std::map<std::string, Expression*> env) {
     Expression* f_exp = f_exp_->eval(env);
     Function* func = dynamic_cast<Function*>(f_exp_->eval(env));
@@ -38,5 +33,5 @@ Call::~Call() {
 }
 
 Expression* Call::copy() {
-	return new Call(f_exp_->copy(), arg_exp_->copy());
+    return new Call(f_exp_->copy(), arg_exp_->copy());
 }

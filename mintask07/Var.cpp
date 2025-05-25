@@ -3,11 +3,6 @@
 Var::Var(std::string id) : id_(id) {
 }
 
-Expression* Var::eval() {
-    std::map<std::string, Expression*> env;
-    return from_env(env);
-}
-
 Var::operator std::string() const {
     return "(var " + id_ + ")";
 }

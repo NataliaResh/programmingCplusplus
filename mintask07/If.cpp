@@ -10,11 +10,6 @@ If::operator std::string() const {
            static_cast<std::string>(*e_else_) + ")";
 }
 
-Expression* If::eval() {
-    std::map<std::string, Expression*> env;
-    return eval(env);
-}
-
 Expression* If::eval(std::map<std::string, Expression*> env) {
     Expression* value_1 = e1_->eval(env);
     Expression* value_2 = e2_->eval(env);
@@ -44,5 +39,5 @@ If::~If() {
 }
 
 Expression* If::copy() {
-	return new If(e1_->copy(), e2_->copy(), e_then_->copy(), e_else_->copy());
+    return new If(e1_->copy(), e2_->copy(), e_then_->copy(), e_else_->copy());
 }

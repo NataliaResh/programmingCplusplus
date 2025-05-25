@@ -1,14 +1,14 @@
 #pragma once
-#include "Expression.h"
 #include "Add.h"
 #include "Call.h"
+#include "Expression.h"
 #include "Function.h"
 #include "If.h"
 #include "Let.h"
 #include "Val.h"
 #include "Var.h"
-#include <string>
 #include <stack>
+#include <string>
 
 class Parser {
   private:

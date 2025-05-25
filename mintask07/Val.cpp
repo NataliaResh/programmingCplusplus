@@ -3,10 +3,6 @@
 Val::Val(int value) : value_(value) {
 }
 
-Expression* Val::eval() {
-    return new Val(value_);
-}
-
 Expression* Val::eval(std::map<std::string, Expression*> env) {
     return new Val(value_);
 }
@@ -19,8 +15,9 @@ int Val::get_value() {
     return value_;
 }
 
-Val::~Val() {}
+Val::~Val() {
+}
 
 Expression* Val::copy() {
-     return new Val(value_);
+    return new Val(value_);
 }

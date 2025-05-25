@@ -9,11 +9,6 @@ Let::operator std::string() const {
            static_cast<std::string>(*e_body_) + ")";
 }
 
-Expression* Let::eval() {
-    std::map<std::string, Expression*> env;
-    return eval(env);
-}
-
 Expression* Let::eval(std::map<std::string, Expression*> env) {
     env.insert({id_, e_value_});
     return e_body_->eval(env);
@@ -29,5 +24,5 @@ Let::~Let() {
 }
 
 Expression* Let::copy() {
-	return new Let(id_, e_value_->copy(), e_body_->copy());
+    return new Let(id_, e_value_->copy(), e_body_->copy());
 }

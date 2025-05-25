@@ -6,7 +6,8 @@ Expression* Parser::parse(std::string& str) {
 
 Expression* Parser::parse_impl(std::string& str, size_t start, size_t end) {
     if (str[0] != '(' || str[end] != ')') {
-        throw ExpressionException("Incorrect string for parsing! The expression must be in brackets!");
+        throw ExpressionException(
+            "Incorrect string for parsing! The expression must be in brackets!");
     }
     ++start;
     std::string type = get_word(str, start);
@@ -73,7 +74,7 @@ Expression* Parser::parse_let(std::string& str, size_t start, size_t end) {
     std::string in_word = get_word(str, start);
     if (in_word != "in") {
         throw ExpressionException("Incorrect string for parsing!");
-   }
+    }
     size_t end2 = get_sub_expression(str, start);
     if (end2 != end - 1) {
         throw ExpressionException("Incorrect string for parsing!");
@@ -125,7 +126,7 @@ size_t Parser::get_sub_expression(std::string& str, size_t start) {
     std::stack<bool> stack;
     if (start >= str.size() || str[start] != '(') {
         throw ExpressionException("Incorrect string for parsing!");
-     }
+    }
     stack.push(1);
     ++start;
     for (; !stack.empty() && start < str.size(); ++start) {
