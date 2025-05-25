@@ -1,0 +1,21 @@
+# ninja log v5
+0	7	1744518266070075284	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-mkdir	bdcab9f385387bed
+1946	1952	1744518268015064299	/home/natalia/programmingCplusplus/mintask06/cmake-build-debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-patch	ac39b394c975d335
+1940	1946	1744518268009064333	/home/natalia/programmingCplusplus/mintask06/cmake-build-debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-update	5d8132a1bb786cc8
+1952	1957	1744518268020064271	/home/natalia/programmingCplusplus/mintask06/cmake-build-debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-configure	e98eff96140f7716
+1963	1968	1744518268031064209	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-install	d888d2fa0bf1f567
+1946	1952	1744518268015064299	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-patch	ac39b394c975d335
+7	1940	1744518268003064367	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-download	be1a45c28d0e2f9
+1975	1982	1744518268045064130	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-done	83a83ff7f33e55a1
+1963	1968	1744518268031064209	/home/natalia/programmingCplusplus/mintask06/cmake-build-debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-install	d888d2fa0bf1f567
+1975	1982	1744518268045064130	/home/natalia/programmingCplusplus/mintask06/cmake-build-debug/_deps/googletest-subbuild/CMakeFiles/googletest-populate-complete	83a83ff7f33e55a1
+7	1940	1744518268003064367	/home/natalia/programmingCplusplus/mintask06/cmake-build-debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-download	be1a45c28d0e2f9
+1975	1982	1744518268045064130	CMakeFiles/googletest-populate-complete	83a83ff7f33e55a1
+1975	1982	1744518268045064130	/home/natalia/programmingCplusplus/mintask06/cmake-build-debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-done	83a83ff7f33e55a1
+1968	1975	1744518268038064169	/home/natalia/programmingCplusplus/mintask06/cmake-build-debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-test	ac93b5b0fd18612a
+1952	1957	1744518268020064271	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-configure	e98eff96140f7716
+1968	1975	1744518268038064169	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-test	ac93b5b0fd18612a
+1957	1963	1744518268026064237	/home/natalia/programmingCplusplus/mintask06/cmake-build-debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-build	ecb7b2175c78319
+0	7	1744518266070075284	/home/natalia/programmingCplusplus/mintask06/cmake-build-debug/_deps/googletest-subbuild/googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-mkdir	bdcab9f385387bed
+1940	1946	1744518268009064333	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-update	5d8132a1bb786cc8
+1957	1963	1744518268026064237	googletest-populate-prefix/src/googletest-populate-stamp/googletest-populate-build	ecb7b2175c78319
