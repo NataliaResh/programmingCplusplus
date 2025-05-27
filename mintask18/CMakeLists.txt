@@ -20,6 +20,7 @@ add_executable(
   tests/test_suite.cpp
         SharedPointer.h
         ControlBlock.h
+        WeakPointer.h
 )
 
 target_link_libraries(

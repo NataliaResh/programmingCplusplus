@@ -23,7 +23,8 @@ class Treap {
         }
 
         SharedPointer<Node> copyNode() {
-            SharedPointer<Node> newNode = SharedPointer<Node>::make_shared(key, priority);
+            //SharedPointer<Node> newNode = SharedPointer<Node>::make_shared(key, priority);
+            SharedPointer<Node> newNode = SharedPointer<Node>(new Node(key, priority));
             if (left != nullptr) {
                 newNode->left = left->copyNode();
             }
@@ -156,7 +157,8 @@ public:
         const std::lock_guard<std::mutex> lock(mutex_);
         SharedPointer<Node> less, greater;
         split(root_, key, less, greater);
-        less = merge(less, SharedPointer<Node>::make_shared(key, dist_(generator_)));
+        //less = merge(less, SharedPointer<Node>::make_shared(key, dist_(generator_)));
+        less = merge(less, SharedPointer<Node>(new Node(key, dist_(generator_))));
         root_ = merge(less, greater);
     }
 

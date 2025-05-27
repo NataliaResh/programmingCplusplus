@@ -3,6 +3,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 #include <thread>
+#include "../WeakPointer.h"
 
 using namespace std;
 
@@ -156,7 +157,6 @@ TEST(Test8, Test8) {
         }
 
         for (size_t i = 0; i < iters; ++i) {
-
             ASSERT_TRUE(treap.try_remove(i));
             count_removed++;
         }
@@ -166,6 +166,99 @@ TEST(Test8, Test8) {
     consumer.join();
     EXPECT_EQ(count_removed, iters);
 }
+
+template <typename T>
+struct LinkedList {
+    struct Node {
+        T key;
+        SharedPointer<Node> next;
+        WeakPointer<Node> prev;
+        explicit Node (T key) : key(key) {}
+    };
+    SharedPointer<Node> root;
+    SharedPointer<Node> tail;
+
+    void add(T key) {
+        auto node = SharedPointer<Node>(new Node(key));
+        if (root == nullptr) {
+            root = node;
+            tail = root;
+        } else {
+            node->prev = tail;
+            tail->next = node;
+            tail = node;
+        }
+    }
+    std::optional<T> pop() {
+        if (!tail) {
+            return std::nullopt;
+        }
+
+        T key = tail->key;
+        if (root == tail) {
+            root = SharedPointer<Node>();
+            tail = SharedPointer<Node>();
+        } else {
+            tail = tail->prev.lock();
+            if (tail != nullptr) {
+                tail->next = SharedPointer<Node>();
+            }
+        }
+        return key;
+    }
+
+    ~LinkedList() {
+        while(root != nullptr) {
+            root = root->next;
+        }
+    }
+};
+
+TEST(SimpleTestWeakPointer, SimpleTestWeakPointer) {
+    auto ptr = SharedPointer<int>(new int(42));
+    WeakPointer<int> weak_ptr = ptr;
+    auto lock_ptr = weak_ptr.lock();
+    EXPECT_EQ(ptr.count_use(), 2);
+}
+
+TEST(SimpleTestWeakPointer2, SimpleTestWeakPointer2) {
+    LinkedList<size_t> list;
+    list.add(1);
+    EXPECT_EQ(list.root.count_use(), 2);
+}
+
+TEST(SimpleTestWeakPointer3, SimpleTestWeakPointer3) {
+    LinkedList<size_t> list;
+    list.add(1);
+    list.add(2);
+    EXPECT_EQ(list.root.count_use(), 1);
+}
+//
+//TEST(TestWeakPointer, TestWeakPointer) {
+//    LinkedList<size_t> list;
+//    const size_t iters = 100;
+//    size_t count_removed = 0;
+//
+//    std::thread producer([&] {
+//        for (size_t i = 0; i < iters; ++i) {
+//            list.add(i);
+//        }
+//    });
+//
+////    std::thread consumer([&] {
+////        while(count_removed < iters) {
+////            if (list.pop()) {
+////                count_removed++;
+////                std::this_thread::sleep_for(
+////                    std::chrono::milliseconds(10));
+////            }
+////        }
+////    });
+////
+//    producer.join();
+////    consumer.join();
+//    //EXPECT_EQ(count_removed, iters);
+//}
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);

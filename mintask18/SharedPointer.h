@@ -1,41 +1,49 @@
+#pragma once
 #include "ControlBlock.h"
+#include <iostream>
+template <typename T> class WeakPointer;
 
-template<typename T>
-class SharedPointer {
-    ControlBlock<T> *control_block_;
+template <typename T> class SharedPointer {
+    ControlBlock<T> *control_block_ = nullptr;
 
+    void release() noexcept {
+        if (!control_block_) {
+            return;
+        }
+
+        control_block_->decrement_reference();
+        if (control_block_->reference_count() == 0 && control_block_->weak_reference_count() == 0) {
+                delete control_block_;
+            }
+        control_block_ = nullptr;
+    }
+
+    friend WeakPointer<T>;
+
+  protected:
     explicit SharedPointer(ControlBlock<T> *control_block) : control_block_(control_block) {
         if (control_block_) {
             control_block_->increment_reference();
         }
     }
 
-    void release() noexcept {
-        if (control_block_) {
-            control_block_->decrement_reference();
-            if (control_block_->reference_count() == 0) {
-                delete control_block_;
-            }
-            control_block_ = nullptr;
-        }
-    }
-
-public:
-    template<typename... Args>
-    static SharedPointer<T> make_shared(Args &&... args) {
-        auto *control_block = new ControlBlock<T>(std::forward<Args>(args)...);
+  public:
+    template <typename... Args> static SharedPointer<T> make_shared(Args &&...args) {
+        auto *control_block = new ControlBlockWithObject<T>(std::forward<Args>(args)...);
         return SharedPointer<T>(control_block);
     }
 
-    SharedPointer() noexcept: control_block_(nullptr) {}
+    SharedPointer() noexcept : control_block_(nullptr) {
+    }
 
-    explicit SharedPointer(T *ptr) : control_block_(ptr ? new ControlBlock<T>(ptr) : nullptr) {
+    explicit SharedPointer(T *ptr)
+        : control_block_(ptr ? new ControlBlockWithPointer<T>(ptr) : nullptr) {
         if (control_block_) {
             control_block_->increment_reference();
         }
     }
 
-    SharedPointer(const SharedPointer &other) noexcept: control_block_(other.control_block_) {
+    SharedPointer(const SharedPointer &other) noexcept : control_block_(other.control_block_) {
         if (control_block_) {
             control_block_->increment_reference();
         }
@@ -58,7 +66,7 @@ public:
         return *this;
     }
 
-    SharedPointer(SharedPointer &&other) noexcept: control_block_(other.control_block_) {
+    SharedPointer(SharedPointer &&other) noexcept : control_block_(other.control_block_) {
         other.control_block_ = nullptr;
     }
 
@@ -101,6 +109,10 @@ public:
 
     T *get() const noexcept {
         return control_block_ ? control_block_->get() : nullptr;
+    }
+
+    long count_use() const {
+        return control_block_->reference_count();
     }
 
     ~SharedPointer() {
