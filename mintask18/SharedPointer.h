@@ -10,8 +10,7 @@ template <typename T> class SharedPointer {
         if (!control_block_) {
             return;
         }
-        if (control_block_->reference_count() == 0) {
-            std::cout << control_block_ << "\n";
+        if (control_block_->reference_count() <= 0) {
             throw std::exception();
         }
         control_block_->decrement_reference();
@@ -20,8 +19,9 @@ template <typename T> class SharedPointer {
         }
         if (control_block_->reference_count() == 0 && control_block_->weak_reference_count() == 0) {
             delete control_block_;
+            control_block_ = nullptr;
         }
-        control_block_ = nullptr;
+
     }
 
     friend WeakPointer<T>;

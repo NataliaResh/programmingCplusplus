@@ -56,11 +56,6 @@ template <typename T> class ControlBlockWithPointer : public ControlBlock<T> {
 
     virtual void delete_pointer() {
         delete pointer_;
-        pointer_ = nullptr;
-    }
-
-    ~ControlBlockWithPointer() {
-        delete pointer_;
     }
 };
 
