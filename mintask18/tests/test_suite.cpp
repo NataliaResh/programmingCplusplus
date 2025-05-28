@@ -175,7 +175,7 @@ struct LinkedList {
         WeakPointer<Node> prev = SharedPointer<Node>();
         explicit Node (T key) : key(key) {}
         ~Node() {
-            std::cout << "delete node " << this << "\n";
+            std::cout << "delete node " << key << "\n";
         }
     };
     SharedPointer<Node> root = SharedPointer<Node>();
@@ -218,7 +218,7 @@ TEST(SimpleTestWeakPointer, SimpleTestWeakPointer) {
 TEST(SimpleTestWeakPointer2, SimpleTestWeakPointer2) {
     LinkedList<size_t> list;
     list.add(1);
-    EXPECT_EQ(list.root.count_use(), 2);
+    EXPECT_EQ(list.root.count_use(), 1);
 }
 
 TEST(SimpleTestWeakPointer3, SimpleTestWeakPointer3) {

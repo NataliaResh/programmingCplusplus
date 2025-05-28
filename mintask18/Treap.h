@@ -17,7 +17,7 @@ class Treap {
         int priority;
         SharedPointer<Node> left, right;
 
-        Node() = delete;
+        Node() = default;
 
         Node(T key, int priority) : key(key), priority(priority) {
         }

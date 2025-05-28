@@ -10,7 +10,10 @@ template <typename T> class SharedPointer {
         if (!control_block_) {
             return;
         }
-
+        if (control_block_->reference_count() == 0) {
+            std::cout << control_block_ << "\n";
+            throw std::exception();
+        }
         control_block_->decrement_reference();
         if (control_block_->reference_count() == 0) {
             control_block_->delete_pointer();
@@ -87,11 +90,14 @@ template <typename T> class SharedPointer {
     }
 
     T &operator*() const noexcept {
+        if (control_block_->get() == nullptr) {
+            throw std::exception();
+        }
         return *control_block_->get();
     }
 
     explicit operator bool() const noexcept {
-        return control_block_ && control_block_->get();
+        return control_block_ && control_block_->get() != nullptr;
     }
 
     bool operator==(const SharedPointer &other) const noexcept {
