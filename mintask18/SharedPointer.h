@@ -11,6 +11,7 @@ template <typename T> class SharedPointer {
             return;
         }
         if (control_block_->reference_count() <= 0) {
+            std::cout << control_block_->reference_count() << "\n";
             throw std::exception();
         }
         control_block_->decrement_reference();

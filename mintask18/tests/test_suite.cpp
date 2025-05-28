@@ -1,9 +1,9 @@
 #include "../Treap.h"
+#include "../WeakPointer.h"
 #include <exception>
 #include <gtest/gtest.h>
 #include <iostream>
 #include <thread>
-#include "../WeakPointer.h"
 
 using namespace std;
 
@@ -33,7 +33,7 @@ void test(vector<int> keys) {
         ++it;
     }
     std::cout << "\n";
-    for (auto &&el: t) {
+    for (auto &&el : t) {
         std::cout << el.key << " ";
     }
     std::cout << "\n";
@@ -117,11 +117,10 @@ TEST(Test7, Test7) {
     });
 
     std::thread consumer([&] {
-        while(count_removed < iters) {
+        while (count_removed < iters) {
             if (treap.try_remove(count_removed)) {
                 count_removed++;
-                std::this_thread::sleep_for(
-                        std::chrono::milliseconds(10));
+                std::this_thread::sleep_for(std::chrono::milliseconds(10));
             }
         }
     });
@@ -167,55 +166,55 @@ TEST(Test8, Test8) {
     EXPECT_EQ(count_removed, iters);
 }
 
-template <typename T>
-struct LinkedList {
+template <typename T> struct LinkedList {
     struct Node {
         T key;
         SharedPointer<Node> next = SharedPointer<Node>();
         WeakPointer<Node> prev = SharedPointer<Node>();
-        explicit Node (T key) : key(key) {}
+
+        explicit Node(T key) : key(key) {
+        }
     };
+
     std::mutex mtx;
     SharedPointer<Node> root = SharedPointer<Node>();
     SharedPointer<Node> tail = SharedPointer<Node>();
 
     void add(T key) {
+        std::lock_guard<std::mutex> lock(mtx);
         auto node = SharedPointer<Node>(new Node(key));
         if (root == nullptr) {
             root = node;
         } else {
             tail->next = node;
             node->prev = tail;
-        }// else {
-//            SharedPointer<Node> tmp = root;
-//            while(tmp->next) {
-//                tmp = tmp->next;
-//            }
-//            tmp->next = node;
-//            node->prev = tmp;
-
-        //}
+        }
         tail = node;
     }
+
     std::optional<T> pop() {
+        std::lock_guard<std::mutex> lock(mtx);
         if (root == nullptr) {
             return std::nullopt;
+        }
+
+        if (root == tail) {
+            T ans = root->key;
+            root = SharedPointer<Node>();
+            tail = SharedPointer<Node>();
+            return ans;
         }
         if (root->next == nullptr) {
             T ans = root->key;
             root = SharedPointer<Node>();
             return ans;
         }
-        SharedPointer<Node> tail = root;
-        SharedPointer<Node> tmp = tail->next;
-        while(tmp->next != nullptr) {
-            tail = tmp;
-            tmp = tmp->next;
-        }
+        T ans = tail->key;
+        auto new_tail = tail->prev.lock();
+        new_tail->next = SharedPointer<Node>();
         tail->prev = WeakPointer<Node>();
-        tail->next = SharedPointer<Node>();
-        tmp->prev = WeakPointer<Node>();;
-        return tmp->key;
+        tail = new_tail;
+        return ans;
     }
 };
 
@@ -251,11 +250,10 @@ TEST(TestWeakPointer, TestWeakPointer) {
     });
 
     std::thread consumer([&] {
-        while(count_removed < iters) {
+        while (count_removed < iters) {
             if (list.pop() != std::nullopt) {
                 count_removed++;
-                std::this_thread::sleep_for(
-                    std::chrono::milliseconds(10));
+                std::this_thread::sleep_for(std::chrono::milliseconds(10));
             }
         }
     });
@@ -264,6 +262,15 @@ TEST(TestWeakPointer, TestWeakPointer) {
     consumer.join();
     EXPECT_EQ(count_removed, iters);
 }
+
+TEST(WeakPointerTest, WeakPointerTest) {
+    WeakPointer<int> weak_ptr;
+    {
+        SharedPointer<int> ptr(new int(42));
+        weak_ptr = ptr;
+    }
+}
+
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
