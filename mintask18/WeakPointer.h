@@ -10,6 +10,7 @@ template <typename T> class WeakPointer {
             control_block_->decrement_weak_reference();
             if (control_block_->reference_count() == 0 &&
                 control_block_->weak_reference_count() == 0) {
+                delete control_block_;
                 control_block_ = nullptr;
             }
         }
