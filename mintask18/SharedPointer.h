@@ -12,9 +12,12 @@ template <typename T> class SharedPointer {
         }
 
         control_block_->decrement_reference();
+        if (control_block_->reference_count() == 0) {
+            control_block_->delete_pointer();
+        }
         if (control_block_->reference_count() == 0 && control_block_->weak_reference_count() == 0) {
-                delete control_block_;
-            }
+            delete control_block_;
+        }
         control_block_ = nullptr;
     }
 

@@ -32,6 +32,8 @@ template <typename T> class ControlBlock {
         return weak_reference_count_;
     }
 
+    virtual void delete_pointer() {}
+
     virtual T* get() noexcept = 0;
 
     virtual ~ControlBlock() = default;
@@ -50,6 +52,10 @@ template <typename T> class ControlBlockWithPointer : public ControlBlock<T> {
 
     T* get() noexcept {
         return pointer_;
+    }
+
+    virtual void delete_pointer() {
+        delete pointer_;
     }
 
     ~ControlBlockWithPointer() {

@@ -171,46 +171,40 @@ template <typename T>
 struct LinkedList {
     struct Node {
         T key;
-        SharedPointer<Node> next;
-        WeakPointer<Node> prev;
+        SharedPointer<Node> next = SharedPointer<Node>();
+        WeakPointer<Node> prev = SharedPointer<Node>();
         explicit Node (T key) : key(key) {}
+        ~Node() {
+            std::cout << "delete node " << this << "\n";
+        }
     };
-    SharedPointer<Node> root;
-    SharedPointer<Node> tail;
+    SharedPointer<Node> root = SharedPointer<Node>();
 
     void add(T key) {
         auto node = SharedPointer<Node>(new Node(key));
         if (root == nullptr) {
             root = node;
-            tail = root;
         } else {
-            node->prev = tail;
-            tail->next = node;
-            tail = node;
+            SharedPointer<Node> tmp = root;
+            while(tmp->next) {
+                tmp = tmp->next;
+            }
+            tmp->next = node;
+            node->prev = tmp;
         }
     }
-    std::optional<T> pop() {
-        if (!tail) {
-            return std::nullopt;
+    T pop() {
+        SharedPointer<Node> tail = root;
+        SharedPointer<Node> tmp = tail->next;
+        while(tmp != nullptr) {
+            tail = tmp;
+            tmp = tmp->next;
         }
-
-        T key = tail->key;
-        if (root == tail) {
-            root = SharedPointer<Node>();
-            tail = SharedPointer<Node>();
-        } else {
-            tail = tail->prev.lock();
-            if (tail != nullptr) {
-                tail->next = SharedPointer<Node>();
-            }
-        }
-        return key;
+        tmp->prev = WeakPointer<Node>();
+        tail->next = SharedPointer<Node>();
     }
 
     ~LinkedList() {
-        while(root != nullptr) {
-            root = root->next;
-        }
     }
 };
 
