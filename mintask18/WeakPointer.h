@@ -107,6 +107,7 @@ template <typename T> class WeakPointer {
     }
 
     SharedPointer<T> lock() const noexcept {
+        std::lock_guard<std::mutex> lock(control_block_->mtx);
         if (control_block_ && control_block_->reference_count() > 0) {
             return SharedPointer<T>(control_block_);
         }

@@ -6,6 +6,8 @@ template <typename T> class ControlBlock {
     std::atomic<long> weak_reference_count_{0};
 
   public:
+    std::mutex mtx;
+    
     template <typename... Args> ControlBlock(Args&&... args) {}
 
     void increment_reference() noexcept {

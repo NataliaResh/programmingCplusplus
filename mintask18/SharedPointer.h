@@ -10,13 +10,17 @@ template <typename T> class SharedPointer {
         if (!control_block_) {
             return;
         }
+
         if (control_block_->reference_count() <= 0) {
             std::cout << control_block_->reference_count() << "\n";
             throw std::exception();
         }
 
-        if (control_block_->reference_count() == 1) {
-            control_block_->delete_pointer();
+        {
+            std::lock_guard<std::mutex> lock(control_block_->mtx);
+            if (control_block_->reference_count() == 1) {
+                control_block_->delete_pointer();
+            }
         }
         control_block_->decrement_reference();
         if (control_block_->reference_count() == 0 && control_block_->weak_reference_count() == 0) {
